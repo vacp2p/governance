@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 /*
     Copyright 2016, Jordi Baylina
 
@@ -26,45 +26,47 @@ pragma solidity 0.8.18;
  * @dev It is ERC20 compliant, but still needs to under go further testing.
  */
 
-import "./MiniMeTokenCore.sol";
+import { Semver } from "../legacy/optimism/Semver.sol";
+import {MiniMeTokenCore } from "./MiniMeTokenCore.sol";
 
 /**
  * @dev The actual token contract, the default controller is the msg.sender
  *  that deploys the contract, so usually this token will be deployed by a
  *  token controller contract, which Giveth will call a "Campaign"
  */
-contract MiniMeToken is MiniMeTokenCore {
-
+contract MiniMeToken is MiniMeTokenCore, Semver {
     constructor(
         address _tokenFactory,
         address payable _parentToken,
-        uint _parentSnapShotBlock,
+        uint256 _parentSnapShotBlock,
         string memory _tokenName,
         uint8 _decimalUnits,
         string memory _tokenSymbol,
         bool _transfersEnabled
-    ) MiniMeTokenCore(_tokenFactory, _parentToken, _parentSnapShotBlock, _tokenName, _decimalUnits, _tokenSymbol, _transfersEnabled) Semver(1, 0, 1) {
+    )
+        MiniMeTokenCore(
+            _tokenFactory,
+            _parentToken,
+            _parentSnapShotBlock,
+            _tokenName,
+            _decimalUnits,
+            _tokenSymbol,
+            _transfersEnabled
+        )
+        Semver(1, 0, 1)
+    { }
 
-    }
+    ////////////////
+    // Generate and destroy tokens
+    ////////////////
 
-////////////////
-// Generate and destroy tokens
-////////////////
-    
     /**
      * @notice Generates `_amount` tokens that are assigned to `_owner`
      * @param _owner The address that will be assigned the new tokens
      * @param _amount The quantity of tokens generated
      * @return True if the tokens are generated correctly
      */
-    function generateTokens(
-        address _owner,
-        uint _amount
-    )
-        public
-        onlyController
-        returns (bool)
-    {
+    function generateTokens(address _owner, uint256 _amount) public onlyController returns (bool) {
         _mint(_owner, _amount);
         return true;
     }
@@ -75,16 +77,8 @@ contract MiniMeToken is MiniMeTokenCore {
      * @param _amount The quantity of tokens to burn
      * @return True if the tokens are burned correctly
      */
-    function destroyTokens(
-        address _owner,
-        uint _amount
-    ) 
-        public
-        onlyController
-        returns (bool)
-    {
+    function destroyTokens(address _owner, uint256 _amount) public onlyController returns (bool) {
         _burn(_owner, _amount);
         return true;
     }
-
 }

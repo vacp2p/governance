@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
 contract Controlled {
     string internal constant ERR_BAD_PARAMETER = "Bad parameter";
     string internal constant ERR_UNAUTHORIZED = "Unauthorized";
+
     event NewController(address controller);
     /// @notice The address of the controller is the only address that can call
     ///  a function with this modifier
-    modifier onlyController {
+
+    modifier onlyController() {
         require(msg.sender == controller, "Unauthorized");
         _;
     }

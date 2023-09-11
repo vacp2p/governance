@@ -1,12 +1,9 @@
-
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import { MiniMeToken } from "../token/MiniMeToken.sol";
+import { MiniMeToken } from "../../token/MiniMeToken.sol";
 import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import { ILegacyMintableERC20, IOptimismMintableERC20 } from "./IOptimismMintableERC20.sol";
-import { Semver } from "./Semver.sol";
 
 /// @title OptimismMintableMiniMeToken
 /// @notice OptimismMintableMiniMeToken is a standard extension of the base MiniMeToken token contract designed
@@ -14,7 +11,7 @@ import { Semver } from "./Semver.sol";
 ///         use an OptimismMintablERC20 as the L2 representation of an L1 token, or vice-versa.
 ///         Designed to be backwards compatible with the older StandardL2ERC20 token which was only
 ///         meant for use on L2.
-contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableERC20, MiniMeToken, Semver {
+contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableERC20, MiniMeToken {
     /// @notice Address of the corresponding version of this token on the remote chain.
     address public immutable REMOTE_TOKEN;
 
@@ -35,7 +32,7 @@ contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableE
     modifier onlyBridge() {
         require(msg.sender == BRIDGE, "OptimismMintableMiniMeToken: only bridge can mint and burn");
         _;
-    } 
+    }
 
     /// @custom:semver 1.0.1
     /// @param _bridge      Address of the L2 standard bridge.
@@ -47,12 +44,22 @@ contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableE
         address _remoteToken,
         address _tokenFactory,
         address payable _parentToken,
-        uint _parentSnapShotBlock,
+        uint256 _parentSnapShotBlock,
         string memory _tokenName,
         uint8 _decimalUnits,
         string memory _tokenSymbol,
         bool _transfersEnabled
-    ) MiniMeToken(_tokenFactory, _parentToken, _parentSnapShotBlock, _tokenName, _decimalUnits, _tokenSymbol, _transfersEnabled) Semver(1, 0, 1) {
+    )
+        MiniMeToken(
+            _tokenFactory,
+            _parentToken,
+            _parentSnapShotBlock,
+            _tokenName,
+            _decimalUnits,
+            _tokenSymbol,
+            _transfersEnabled
+        )
+    {
         REMOTE_TOKEN = _remoteToken;
         BRIDGE = _bridge;
     }
@@ -60,7 +67,10 @@ contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableE
     /// @notice Allows the StandardBridge on this network to mint tokens.
     /// @param _to     Address to mint tokens to.
     /// @param _amount Amount of tokens to mint.
-    function mint(address _to, uint256 _amount)
+    function mint(
+        address _to,
+        uint256 _amount
+    )
         external
         override(IOptimismMintableERC20, ILegacyMintableERC20)
         onlyBridge
@@ -72,7 +82,10 @@ contract OptimismMintableMiniMeToken is IOptimismMintableERC20, ILegacyMintableE
     /// @notice Allows the StandardBridge on this network to burn tokens.
     /// @param _from   Address to burn tokens from.
     /// @param _amount Amount of tokens to burn.
-    function burn(address _from, uint256 _amount)
+    function burn(
+        address _from,
+        uint256 _amount
+    )
         external
         override(IOptimismMintableERC20, ILegacyMintableERC20)
         onlyBridge

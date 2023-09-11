@@ -2,8 +2,8 @@
 pragma solidity ^0.8.18;
 /// @dev `Owned` is a base level contract that assigns an `owner` that can be
 ///  later changed
-contract Owned {
 
+contract Owned {
     /// @dev `owner` is the only address that can call a function with this
     /// modifier
     modifier onlyOwner() {
@@ -26,7 +26,6 @@ contract Owned {
     function changeOwner(address _newOwner) external onlyOwner {
         newOwner = _newOwner;
     }
-
 
     function acceptOwnership() external {
         if (msg.sender == newOwner) {

@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.18;
-import "./token/TokenController.sol";
-import "./token/MiniMeToken.sol";
+
+import "../token/TokenController.sol";
+import "../token/MiniMeToken.sol";
 import "./SafeMath.sol";
 import "./Owned.sol";
 
@@ -31,6 +32,7 @@ import "./Owned.sol";
 ///  asks it to do so.
 contract SNTPlaceHolder is TokenController, Owned {
     using SafeMath for uint256;
+
     MiniMeToken public snt;
 
     constructor(address _owner, address payable _snt) {
@@ -45,24 +47,24 @@ contract SNTPlaceHolder is TokenController, Owned {
         snt.changeController(_newController);
         emit ControllerChanged(_newController);
     }
- 
+
     //////////
     // MiniMe Controller Interface functions
     //////////
 
     // In between the offering and the network. Default settings for allowing token transfers.
-    function proxyPayment(address) override public payable returns (bool) {
+    function proxyPayment(address) public payable override returns (bool) {
         return false;
     }
 
-    function onTransfer(address, address, uint256) override  public pure returns (bool) {
+    function onTransfer(address, address, uint256) public pure override returns (bool) {
         return true;
     }
 
-    function onApprove(address, address, uint256) override public pure returns (bool) {
+    function onApprove(address, address, uint256) public pure override returns (bool) {
         return true;
     }
-    
+
     event ClaimedTokens(address indexed _token, address indexed _controller, uint256 _amount);
     event ControllerChanged(address indexed _newController);
 }

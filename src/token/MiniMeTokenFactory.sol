@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.8.18;
+pragma solidity 0.8.19;
+
 import "./MiniMeToken.sol";
 
 ////////////////
@@ -12,7 +13,6 @@ import "./MiniMeToken.sol";
  *  same class
  */
 contract MiniMeTokenFactory {
-
     /**
      * @notice Update the DApp by creating a new token with new functionalities
      *  the msg.sender becomes the controller of this clone token
@@ -27,12 +27,15 @@ contract MiniMeTokenFactory {
      */
     function createCloneToken(
         address payable _parentToken,
-        uint _snapshotBlock,
+        uint256 _snapshotBlock,
         string memory _tokenName,
         uint8 _decimalUnits,
         string memory _tokenSymbol,
         bool _transfersEnabled
-    ) public returns (MiniMeToken) {
+    )
+        public
+        returns (MiniMeToken)
+    {
         MiniMeToken newToken = new MiniMeToken(
             address(this),
             _parentToken,
