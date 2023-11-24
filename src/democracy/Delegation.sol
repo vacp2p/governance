@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity >=0.8.19;
 
+import "../common/Controlled.sol";
+
 /**
  * @title Delegation
  * @author Ricardo Guilherme Schmidt (Status Research & Development GmbH). 
